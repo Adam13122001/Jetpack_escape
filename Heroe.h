@@ -18,7 +18,7 @@ public:
     void move_sprite(const sf::Time &elapsed){
         move(-1*speed_x*elapsed.asSeconds(),speed_y*elapsed.asSeconds());
         sf::FloatRect bounds = getGlobalBounds();
-        if(bounds.left<=2){
+        if(bounds.left+80<=0){
             pojaw();
         }
     }
@@ -35,7 +35,7 @@ public:
                                     if (!texture.loadFromFile("jetpack.png")) {
                                     std::cerr << "Could not load texture" << std::endl;}
                                     setTexture(texture);
-                                    setScale(0.06,0.06);
+                                    setScale(0.1,0.055);
                                     }
     void move_sprite(const sf::Time &elapsed){
             sf::FloatRect bounds = getGlobalBounds();
@@ -46,7 +46,7 @@ public:
                 }
                 else{
                     if(bounds.top<down_-bounds.height){
-                        move(0,0.8*speed_y*elapsed.asSeconds());
+                        move(0,speed_y*elapsed.asSeconds());
                     }
                 }
 
@@ -63,7 +63,18 @@ public:
         if(kasa%100==0){
             speed_y*=1.1;
         }
-        std::cout<<kasa<<std::endl;
+    }
+    void smierc(int odj){
+        zycie-=odj;
+    }
+    void leczenie(int odj){
+        zycie+=odj;
+    }
+    int punty(){
+        return kasa;
+    }
+    int zycie_(){
+        return zycie;
     }
 private:
 
@@ -72,6 +83,7 @@ private:
     int left_;
     int right_; 
 
+    int zycie=1;
     int kasa=0;
 
 };
@@ -81,7 +93,7 @@ private:
 class Pocisk : public RuchomySprite{
 public:
     Pocisk():RuchomySprite(){
-        setPosition(rand()%200 + 400,rand()%560);
+        setPosition(rand()%200 + 700,rand()%560);
         if (!texture.loadFromFile("bullet.png")) {
         std::cerr << "Could not load texture" << std::endl;}
         setTexture(texture);
@@ -96,7 +108,7 @@ class Przeszkoda : public sf::RectangleShape{
     int speed = 0;
 public:
     Przeszkoda(sf::Vector2f &size):sf::RectangleShape(size){
-        setPosition(rand()%400 + 300,rand()%560);
+        setPosition(rand()%600 + 700,rand()%560);
         setFillColor(sf::Color(100, 50, 250));
         setSpeed(150);
     }
@@ -106,12 +118,13 @@ public:
     void move_przeszkoda(const sf::Time &elapsed){
         move(-1*speed*elapsed.asSeconds(),0);
         sf::FloatRect bounds = getGlobalBounds();
-        if(bounds.left<=2){
+        if(bounds.left+20<=0){
             pojaw_przeszkode();
         }
     }
     void pojaw_przeszkode(){
         setPosition(799,rand()%540);
+        speed*=1.01;
     }
 };
 
@@ -125,6 +138,17 @@ public:
                                     setTexture(texture);
                                     setScale(0.1,0.1);
                                     setSpeed(150,0);
+                                    }
+};
+
+class Bonus : public RuchomySprite{
+public:
+    Bonus():RuchomySprite(){setPosition(600,rand()%600);
+                                    if (!texture.loadFromFile("bonus.png")) {
+                                    std::cerr << "Could not load texture" << std::endl;}
+                                    setTexture(texture);
+                                    setScale(0.3,0.3);
+                                    setSpeed(120,0);
                                     }
 };
 
